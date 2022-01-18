@@ -1,23 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
-
+import React, {useState, useEffect} from 'react'
+import axios from 'axios';
+import Card from './components/Card';
 function App() {
+
+  const [characters, setCharacters] = useState([]);
+
+  const getApiCharacter = async () => {
+    const apiResponse = await axios.get('https://rickandmortyapi.com/api/character');
+    setCharacters(apiResponse.data.results);
+  }
+  
+  useEffect(() =>{
+    getApiCharacter();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Rick and Morty</h1>
+      <div className="container">
+        <ul className="list-card">
+          {characters.map((character, i) => {
+            if(i < 6){
+              return (
+              <li key={i}>
+                <Card character={character}/>
+              </li>
+              )
+              
+            }
+            return null;
+          })}
+
+        </ul>
+
+      </div>
     </div>
   );
 }
